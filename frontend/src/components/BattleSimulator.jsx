@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { doc, updateDoc, increment } from 'firebase/firestore';
+import { db } from '../firebase';
+import { auth } from '../firebase';
 import '../styles/BattleSimulator.css';
 
 const BACKEND_URL = 'http://localhost:5000/api/pokemon/';
@@ -60,70 +63,96 @@ const BattleSimulator = () => {
     }
   }, [cpuTurn, cpuDetails]);
 
+  // Check for winner when HP changes
   useEffect(() => {
-    if (playerHP === 0) setWinner('CPU Wins!');
-    if (cpuHP === 0) setWinner('You Win!');
-  }, [playerHP, cpuHP]);
+    if (playerHP === 0 && !winner) {
+      setWinner('CPU Wins!');
+    } else if (cpuHP === 0 && !winner) {
+      setWinner('You Win!');
+    }
+  }, [playerHP, cpuHP, winner]);
+
+  // Update user stats in Firestore
+  useEffect(() => {
+    const updateStats = async () => {
+      if (!winner || !auth.currentUser) return;
+
+      const userRef = doc(db, 'users', auth.currentUser.uid);
+
+      try {
+        if (winner === 'You Win!') {
+          await updateDoc(userRef, { wins: increment(1) });
+        } else if (winner === 'CPU Wins!') {
+          await updateDoc(userRef, { losses: increment(1) });
+        }
+        console.log('User stats updated successfully!');
+      } catch (error) {
+        console.error('Error updating user stats:', error);
+      }
+    };
+
+    updateStats();
+  }, [winner]);
 
   if (!playerDetails || !cpuDetails) return <div>Loading Pokémon...</div>;
 
   return (
     <div className="battle-container">
-  <h1>Pokémon Battle Simulator</h1>
+      <h1>Pokémon Battle Simulator</h1>
 
-  {/* Cards Container */}
-  <div className="cards-container">
-    {/* Player Section */}
-    <div className="player">
-      <h2>Player: {playerDetails.name.toUpperCase()}</h2>
-      <img src={playerDetails.sprite} alt={playerDetails.name} />
-      <div className="health-bar">
-        <div
-          className="health-bar-inner player"
-          style={{ width: `${(playerHP / playerDetails.stats[0].base_stat) * 100}%` }}
-        ></div>
+      {/* Cards Container */}
+      <div className="cards-container">
+        {/* Player Section */}
+        <div className="player">
+          <h2>Player: {playerDetails.name.toUpperCase()}</h2>
+          <img src={playerDetails.sprite} alt={playerDetails.name} />
+          <div className="health-bar">
+            <div
+              className="health-bar-inner player"
+              style={{ width: `${(playerHP / playerDetails.stats[0].base_stat) * 100}%` }}
+            ></div>
+          </div>
+          <p>HP: {playerHP}</p>
+          <div className="moves-container">
+            {playerDetails.moves.map((move) => (
+              <button key={move} onClick={() => handleMove(move)} disabled={cpuHP === 0 || playerHP === 0}>
+                {move.toUpperCase()}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* CPU Section */}
+        <div className="player">
+          <h2>CPU: {cpuDetails.name.toUpperCase()}</h2>
+          <img src={cpuDetails.sprite} alt={cpuDetails.name} />
+          <div className="health-bar">
+            <div
+              className="health-bar-inner cpu"
+              style={{ width: `${(cpuHP / cpuDetails.stats[0].base_stat) * 100}%` }}
+            ></div>
+          </div>
+          <p>HP: {cpuHP}</p>
+        </div>
       </div>
-      <p>HP: {playerHP}</p>
-      <div className="moves-container">
-        {playerDetails.moves.map((move) => (
-          <button key={move} onClick={() => handleMove(move)} disabled={cpuHP === 0 || playerHP === 0}>
-            {move.toUpperCase()}
-          </button>
-        ))}
+
+      {/* Battle Log */}
+      <div className="battle-log">
+        <h3>Battle Log</h3>
+        <ul>
+          {battleLog.map((log, index) => (
+            <li key={index}>{log}</li>
+          ))}
+        </ul>
       </div>
+
+      {/* Winner Message */}
+      {winner && (
+        <div className="winner-message">
+          <h2>{winner}</h2>
+        </div>
+      )}
     </div>
-
-    {/* CPU Section */}
-    <div className="player">
-      <h2>CPU: {cpuDetails.name.toUpperCase()}</h2>
-      <img src={cpuDetails.sprite} alt={cpuDetails.name} />
-      <div className="health-bar">
-        <div
-          className="health-bar-inner cpu"
-          style={{ width: `${(cpuHP / cpuDetails.stats[0].base_stat) * 100}%` }}
-        ></div>
-      </div>
-      <p>HP: {cpuHP}</p>
-    </div>
-  </div>
-
-  {/* Battle Log */}
-<div className="battle-log">
-  <h3>Battle Log</h3>
-  <ul>
-    {battleLog.map((log, index) => (
-      <li key={index}>{log}</li>
-    ))}
-  </ul>
-</div>
-
-{/* Winner Message */}
-{winner && (
-  <div className="winner-message">
-    <h2>{winner}</h2>
-  </div>
-)}
-</div> 
   );
 };
 
