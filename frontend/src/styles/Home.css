@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400;1,700&family=Manrope:wght@200&family=Monoton&family=Pacifico&display=swap');
+.home {
+  display: flex;
+  flex-direction: row; 
+  align-items: center; 
+  justify-content: center; 
+  min-height: calc(100vh - 56px);
+  /*
+  background-image: url('/public/backimg.jpg'); 
+  background-size: 100%; /* Adjust this value for more or less zoom
+  background-position: center; 
+  background-repeat: no-repeat;
+  */
+  text-align: center; 
+  padding: 100px; 
+  box-sizing: border-box;
+}
+
+.text-container {
+  flex: 2; 
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center; 
+  height: 10vh;
+}
+
+.gif-container {
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center;
+  align-items: center; 
+  text-align: center; 
+  height: 10vh;
+}
+
+.learning-gif {
+  height: auto; 
+  max-width: 100%;
+  margin: 0 auto; 
+}
+
+.home h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 4vw;
+  background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+  -webkit-background-clip: text;
+  color: transparent;
+  margin-bottom: 10px;
+}
+
+.home p {
+  font-family: 'Poppins';
+  color: rgb(0, 0, 0);
+  font-size: 1.7vw; 
+  max-width: 800px;
+  line-height: 1.6;
+  margin-bottom: 5px;
+}
+
+.start-button {
+  background-color: #3D518C;
+  border: none;
+  color: white;
+  padding: 20px 40px;
+  font-size: 1.5rem;;
+  border-radius: 30px;
+  cursor: pointer;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  margin-top: 10%;
+  margin-bottom: 10px;
+  font-family: 'Manrope',monospace;
+  background: linear-gradient(to right, #3D518C 30%, #CCCCFF 120%);
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  display: flex; 
+  align-items: center; 
+}
+
+.start-button:hover {
+  background: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+  box-shadow: 0 0 10px 2px #FFCC70,
+  0 0 20px 4px #C850C0; 
+}
+
+a {
+  text-align: center;
+  font-size: 7em;
+  margin-bottom: 0;
+  margin-top: 0;
+  line-height: 1;
+  text-decoration: none;
+  color: #fff;
+}
+
+.neon-blue {
+  font-family: monoton;
+  font-size: 1.5em;
+  text-decoration: none;
+  color: #3D518C;
+  text-align: center;
+  animation: neon-blue 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes neon-blue {
+  from {
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #228dff,
+      0 0 35px #228dff, 0 0 40px #228dff, 0 0 50px #228dff, 0 0 75px #228dff;
+  }
+  to {
+    text-shadow: 0 0 2.5px #fff, 0 0 5px #fff, 0 0 7.5px #fff, 0 0 10px #228dff,
+      0 0 17.5px #228dff, 0 0 20px #228dff, 0 0 25px #228dff, 0 0 37.5px #228dff;
+  }
+}
+
+@media (max-width: 768px) {
+  .text-container {
+    height: 60vh; /* Adjust for smaller screens */
+  }
+
+  .gif-container {
+    height: 40vh; /* Adjust for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .text-container {
+    height: 50vh; /* Further adjustments for very small screens */
+  }
+
+  .gif-container {
+    height: 50vh; /* Further adjustments for very small screens */
+  }
+}

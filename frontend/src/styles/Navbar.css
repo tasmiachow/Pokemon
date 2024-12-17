@@ -1,0 +1,49 @@
+/* Reset some default margins */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+.navbar {
+  position: fixed; /* Stick the navbar to the top */
+  top: 0;
+  left: 0;
+  width: 100%; /* Full width */
+  background-color: #333; /* Dark background */
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px; /* Spacing */
+  z-index: 1000; /* Ensure it stays above other elements */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3); /* Add a slight shadow */
+}
+
+.logo a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px; /* Spacing between links */
+}
+
+.nav-links li a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.5rem;
+  transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+  color: #002fff; /* Neon blue hover effect */
+}
