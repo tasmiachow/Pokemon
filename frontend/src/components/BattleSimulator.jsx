@@ -108,16 +108,22 @@ const BattleSimulator = () => {
   </div>
 
   {/* Battle Log */}
-  <div className="battle-log">
-    <h3>Battle Log</h3>
-    <ul>
-      {battleLog.map((log, index) => (
-        <li key={index}>{log}</li>
-      ))}
-    </ul>
-    {winner && <h2>{winner}</h2>}
-  </div>
+<div className="battle-log">
+  <h3>Battle Log</h3>
+  <ul>
+    {battleLog.map((log, index) => (
+      <li key={index}>{log}</li>
+    ))}
+  </ul>
 </div>
+
+{/* Winner Message */}
+{winner && (
+  <div className="winner-message">
+    <h2>{winner}</h2>
+  </div>
+)}
+</div> 
   );
 };
 
