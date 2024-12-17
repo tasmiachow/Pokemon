@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { doc, updateDoc, increment } from 'firebase/firestore';
-import { db } from '../firebase';
-import { auth } from '../firebase';
+import { db, auth } from '../firebase';
 import '../styles/BattleSimulator.css';
 
 const BACKEND_URL = 'http://localhost:5000/api/pokemon/';
 
 const BattleSimulator = () => {
   const location = useLocation();
+  const navigate = useNavigate(); // For navigation
   const { pokemon: playerPokemon } = location.state || { pokemon: { name: 'pikachu', id: 25 } };
 
   const [playerDetails, setPlayerDetails] = useState(null);
@@ -63,7 +63,6 @@ const BattleSimulator = () => {
     }
   }, [cpuTurn, cpuDetails]);
 
-  // Check for winner when HP changes
   useEffect(() => {
     if (playerHP === 0 && !winner) {
       setWinner('CPU Wins!');
@@ -72,7 +71,6 @@ const BattleSimulator = () => {
     }
   }, [playerHP, cpuHP, winner]);
 
-  // Update user stats in Firestore
   useEffect(() => {
     const updateStats = async () => {
       if (!winner || !auth.currentUser) return;
@@ -85,7 +83,6 @@ const BattleSimulator = () => {
         } else if (winner === 'CPU Wins!') {
           await updateDoc(userRef, { losses: increment(1) });
         }
-        console.log('User stats updated successfully!');
       } catch (error) {
         console.error('Error updating user stats:', error);
       }
@@ -150,6 +147,9 @@ const BattleSimulator = () => {
       {winner && (
         <div className="winner-message">
           <h2>{winner}</h2>
+          <button onClick={() => navigate('/select-pokemon')} className="replay-button">
+            Replay
+          </button>
         </div>
       )}
     </div>

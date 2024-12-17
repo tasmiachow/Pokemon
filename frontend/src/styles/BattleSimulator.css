@@ -136,4 +136,21 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     z-index: 9;
   }
+  .replay-button {
+    margin-top: 20px;
+    background-color: #ffcb05;
+    color: #3b4cca;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .replay-button:hover {
+    background-color: #3b4cca;
+    color: #fff;
+  }
+  
   

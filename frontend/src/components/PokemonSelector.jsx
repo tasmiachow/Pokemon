@@ -22,6 +22,7 @@ const POKEMON_DATA = [
 
 const PokemonSelector = () => {
   const [selectedPokemon, setSelectedPokemon] = useState(POKEMON_DATA[0]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate(); // For navigation
 
   const handleChange = (e) => {
@@ -32,8 +33,27 @@ const PokemonSelector = () => {
   };
 
   const handleSubmit = () => {
-    // Navigate to battle simulator with selected Pokémon
     navigate('/battle-simulator', { state: { pokemon: selectedPokemon } });
+  };
+
+  const fetchRandomPokemon = async () => {
+    setLoading(true);
+    try {
+      const randomId = Math.floor(Math.random() * 898) + 1; // Random ID between 1-898 (all Pokémon in PokéAPI)
+
+      // Fetch Pokémon details from PokéAPI
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}`);
+      const data = await response.json();
+
+      // Navigate directly to battle simulator with fetched Pokémon
+      navigate('/battle-simulator', {
+        state: { pokemon: { id: randomId, name: data.name } },
+      });
+    } catch (error) {
+      console.error('Error fetching random Pokémon:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -54,7 +74,12 @@ const PokemonSelector = () => {
           className="pokemon-image"
         />
       </div>
-      <button onClick={handleSubmit}>Submit</button>
+      <div className="button-container">
+        <button onClick={handleSubmit}>Submit</button>
+        <button onClick={fetchRandomPokemon} disabled={loading}>
+          {loading ? 'Loading...' : 'Choose Random'}
+        </button>
+      </div>
     </div>
   );
 };

@@ -8,6 +8,7 @@ import Home from './Home.jsx';
 import Login from './components/Login.jsx';
 import PokemonSelector from './components/PokemonSelector.jsx';
 import BattleSimulator from './components/BattleSimulator.jsx';
+import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
         >
           <Route path="/select-pokemon" element={<PokemonSelector />} />
           <Route path="/battle-simulator" element={<BattleSimulator />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Route>
       </Routes>
     </>
