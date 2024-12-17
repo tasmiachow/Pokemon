@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/PokemonSelector.css';
 
 const POKEMON_DATA = [
@@ -20,9 +21,9 @@ const POKEMON_DATA = [
 ];
 
 const PokemonSelector = () => {
-  const [selectedPokemon, setSelectedPokemon] = useState(POKEMON_DATA[0]); // Default selection
+  const [selectedPokemon, setSelectedPokemon] = useState(POKEMON_DATA[0]);
+  const navigate = useNavigate(); // For navigation
 
-  // Change Pokémon selection
   const handleChange = (e) => {
     const chosenPokemon = POKEMON_DATA.find(
       (pokemon) => pokemon.id === parseInt(e.target.value)
@@ -30,22 +31,14 @@ const PokemonSelector = () => {
     setSelectedPokemon(chosenPokemon);
   };
 
-  // Choose a random Pokémon
-  const handleRandom = () => {
-    const randomIndex = Math.floor(Math.random() * POKEMON_DATA.length);
-    setSelectedPokemon(POKEMON_DATA[randomIndex]);
-  };
-
-  // Handle submit action
   const handleSubmit = () => {
-    alert(`You selected ${selectedPokemon.name.toUpperCase()}!`);
+    // Navigate to battle simulator with selected Pokémon
+    navigate('/battle-simulator', { state: { pokemon: selectedPokemon } });
   };
 
   return (
     <div className="pokemon-selector">
       <h1>Select Your Pokémon</h1>
-      
-      {/* Dropdown */}
       <select onChange={handleChange} value={selectedPokemon.id}>
         {POKEMON_DATA.map((pokemon) => (
           <option key={pokemon.id} value={pokemon.id}>
@@ -53,22 +46,15 @@ const PokemonSelector = () => {
           </option>
         ))}
       </select>
-
-      {/* Pokémon Display */}
       <div className="pokemon-display">
         <h2>{selectedPokemon.name.toUpperCase()}</h2>
         <img
-          src={`/img/${selectedPokemon.id}.png`} // Load image from public/img folder
+          src={`/img/${selectedPokemon.id}.png`}
           alt={selectedPokemon.name}
           className="pokemon-image"
         />
       </div>
-
-      {/* Buttons */}
-      <div className="button-container">
-        <button onClick={handleSubmit}>Submit</button>
-        <button onClick={handleRandom}>Choose Random</button>
-      </div>
+      <button onClick={handleSubmit}>Submit</button>
     </div>
   );
 };

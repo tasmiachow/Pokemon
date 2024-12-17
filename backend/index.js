@@ -1,23 +1,45 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 5000;
+const PORT = 5000;
 
 app.use(cors());
 app.use(express.json());
 
-// Root route
-app.get('/', (req, res) => {
-    res.send('Welcome to the Express Backend!');
+// Dynamic import for node-fetch
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+
+// Pokémon API Route
+app.get('/api/pokemon/:nameOrId', async (req, res) => {
+  const { nameOrId } = req.params;
+
+  try {
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${nameOrId}`);
+    if (!response.ok) {
+      return res.status(404).json({ error: 'Pokémon not found' });
+    }
+    const data = await response.json();
+
+    const simplifiedData = {
+      name: data.name,
+      id: data.id,
+      stats: data.stats.map((stat) => ({
+        name: stat.stat.name,
+        base_stat: stat.base_stat,
+      })),
+      moves: data.moves.slice(0, 4).map((move) => move.move.name),
+      sprite: data.sprites.front_default,
+    };
+
+    res.json(simplifiedData);
+  } catch (error) {
+    console.error('Error fetching Pokémon data:', error);
+    res.status(500).json({ error: 'Failed to fetch Pokémon data' });
+  }
 });
 
-// Example API route
-app.get('/api', (req, res) => {
-    res.json({ message: "Welcome to the API endpoint!" });
-});
-
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });

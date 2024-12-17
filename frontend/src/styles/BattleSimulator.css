@@ -1,0 +1,123 @@
+/* Overall Container */
+.battle-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  
+  /* Cards Container: Align Cards Side by Side */
+  .cards-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px; /* Space between the cards */
+    margin: 20px 0;
+  }
+  
+  /* Player Card */
+  .player {
+    background-color: #ffffff;
+    border: 3px solid #3b4cca;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    width: 250px;
+    text-align: center;
+  }
+  
+  .player img {
+    width: 100px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  
+  .player h2 {
+    font-size: 1.2rem;
+    color: #3b4cca;
+    margin-bottom: 10px;
+  }
+  
+  .player p {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  /* Move Buttons */
+  .moves-container button {
+    background-color: #ffcb05;
+    color: #3b4cca;
+    border: none;
+    padding: 8px 10px;
+    margin: 5px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .moves-container button:hover {
+    background-color: #3b4cca;
+    color: #ffffff;
+  }
+  
+  /* Health Bar */
+  .health-bar {
+    background-color: #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .health-bar-inner {
+    height: 100%;
+    transition: width 0.5s ease;
+  }
+  
+  .health-bar-inner.player {
+    background-color: #28a745; /* Green for Player */
+  }
+  
+  .health-bar-inner.cpu {
+    background-color: #dc3545; /* Red for CPU */
+  }
+  
+  /* Battle Log */
+  .battle-log {
+    background-color: #ffffff;
+    border: 2px solid #ffc107;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    width: 600px;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 20px;
+    text-align: left;
+  }
+  
+  .battle-log h3 {
+    color: #3b4cca;
+    margin-bottom: 10px;
+  }
+  
+  .battle-log ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .battle-log li {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 5px;
+  }
+  
