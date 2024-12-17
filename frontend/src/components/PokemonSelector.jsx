@@ -39,22 +39,32 @@ const PokemonSelector = () => {
   const fetchRandomPokemon = async () => {
     setLoading(true);
     try {
-      const randomId = Math.floor(Math.random() * 898) + 1; // Random ID between 1-898 (all Pokémon in PokéAPI)
-
-      // Fetch Pokémon details from PokéAPI
+      const randomId = Math.floor(Math.random() * 898) + 1; // Random ID between 1-898 (PokéAPI range)
+  
+      // Fetch Pokémon details from the API
       const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}`);
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status} - ${response.statusText}`);
+      }
       const data = await response.json();
-
-      // Navigate directly to battle simulator with fetched Pokémon
+  
+      // Navigate directly to the battle simulator with fetched Pokémon
       navigate('/battle-simulator', {
         state: { pokemon: { id: randomId, name: data.name } },
       });
     } catch (error) {
-      console.error('Error fetching random Pokémon:', error);
+      console.error('Error fetching Pokémon:', error.message);
+  
+      // Fallback: Choose a default Pokémon if API fails
+      alert('PokéAPI is currently unavailable. Selecting Pikachu as your Pokémon!');
+      navigate('/battle-simulator', {
+        state: { pokemon: { id: 25, name: 'pikachu' } }, // Fallback to Pikachu
+      });
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="pokemon-selector">

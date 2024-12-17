@@ -6,9 +6,24 @@ import '../styles/BattleSimulator.css';
 
 const BACKEND_URL = 'http://localhost:5000/api/pokemon/';
 
+// Default Pokémon fallback data
+const DEFAULT_PLAYER = {
+  name: 'pikachu',
+  sprite: '/img/25.png', // Local image for fallback
+  stats: [{ base_stat: 100 }],
+  moves: ['thunder-shock', 'quick-attack', 'iron-tail', 'electro-ball'],
+};
+
+const DEFAULT_CPU = {
+  name: 'charmander',
+  sprite: '/img/4.png', // Local image for fallback
+  stats: [{ base_stat: 100 }],
+  moves: ['ember', 'scratch', 'smokescreen', 'growl'],
+};
+
 const BattleSimulator = () => {
   const location = useLocation();
-  const navigate = useNavigate(); // For navigation
+  const navigate = useNavigate();
   const { pokemon: playerPokemon } = location.state || { pokemon: { name: 'pikachu', id: 25 } };
 
   const [playerDetails, setPlayerDetails] = useState(null);
@@ -19,16 +34,17 @@ const BattleSimulator = () => {
   const [playerHP, setPlayerHP] = useState(100);
   const [cpuHP, setCpuHP] = useState(100);
 
-  // Fetch data for Player and CPU Pokémon
+  // Fetch Pokémon data with fallback
   useEffect(() => {
     const fetchData = async () => {
       try {
         const playerResponse = await fetch(`${BACKEND_URL}${playerPokemon.name}`);
+        if (!playerResponse.ok) throw new Error('Player API failed');
         const playerData = await playerResponse.json();
 
-        // Randomly choose a CPU Pokémon
         const randomId = Math.floor(Math.random() * 151) + 1;
         const cpuResponse = await fetch(`${BACKEND_URL}${randomId}`);
+        if (!cpuResponse.ok) throw new Error('CPU API failed');
         const cpuData = await cpuResponse.json();
 
         setPlayerDetails(playerData);
@@ -36,7 +52,14 @@ const BattleSimulator = () => {
         setPlayerHP(playerData.stats[0].base_stat); // Base HP
         setCpuHP(cpuData.stats[0].base_stat); // Base HP
       } catch (error) {
-        console.error('Error fetching Pokémon data:', error);
+        console.error('Error fetching Pokémon data:', error.message);
+        alert('API is currently unavailable. Default Pokémon will be used.');
+
+        // Use fallback Pokémon data
+        setPlayerDetails(DEFAULT_PLAYER);
+        setCpuDetails(DEFAULT_CPU);
+        setPlayerHP(DEFAULT_PLAYER.stats[0].base_stat);
+        setCpuHP(DEFAULT_CPU.stats[0].base_stat);
       }
     };
 
@@ -97,9 +120,7 @@ const BattleSimulator = () => {
     <div className="battle-container">
       <h1>Pokémon Battle Simulator</h1>
 
-      {/* Cards Container */}
       <div className="cards-container">
-        {/* Player Section */}
         <div className="player">
           <h2>Player: {playerDetails.name.toUpperCase()}</h2>
           <img src={playerDetails.sprite} alt={playerDetails.name} />
@@ -119,7 +140,6 @@ const BattleSimulator = () => {
           </div>
         </div>
 
-        {/* CPU Section */}
         <div className="player">
           <h2>CPU: {cpuDetails.name.toUpperCase()}</h2>
           <img src={cpuDetails.sprite} alt={cpuDetails.name} />
@@ -133,7 +153,6 @@ const BattleSimulator = () => {
         </div>
       </div>
 
-      {/* Battle Log */}
       <div className="battle-log">
         <h3>Battle Log</h3>
         <ul>
@@ -143,7 +162,6 @@ const BattleSimulator = () => {
         </ul>
       </div>
 
-      {/* Winner Message */}
       {winner && (
         <div className="winner-message">
           <h2>{winner}</h2>
