@@ -1,4 +1,4 @@
-# Pokemon
+# Pokemon Battle Simulator 
 Overview: Users can create an account choose a pokemon from a preselected list or take their chances with a random pokemon, where they will go head to head with the CPU. 
 
 # Features 
