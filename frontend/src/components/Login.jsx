@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { auth, db } from '../firebase';
+import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import '../styles/Login.css'; // Ensure this is correct
@@ -15,6 +16,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   // Detect screen size
   useEffect(() => {
@@ -49,6 +51,7 @@ const Login = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       console.log('User signed in successfully!');
+      navigate('/select-pokemon');
     } catch (err) {
       console.error('Error:', err.message);
       setError('Invalid credentials. Please try again.');
@@ -78,6 +81,7 @@ const Login = () => {
       });
 
       console.log('User account created!');
+      navigate('/select-pokemon');
     } catch (err) {
       console.error('Error:', err.message);
       setError('Failed to create an account.');
